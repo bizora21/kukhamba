@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { MapPin, Calendar, DollarSign, User as UserIcon, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -20,8 +20,8 @@ interface Job {
 }
 
 function JobDetailsContent() {
-    const params = useParams();
-    const id = params?.id as string;
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
     const router = useRouter();
     const { user, token } = useAuth();
     const [job, setJob] = useState<Job | null>(null);

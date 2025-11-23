@@ -131,7 +131,7 @@ export default function JobsPage() {
                 ) : (
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {jobs.map((job) => (
-                            <Link href={`/jobs/${job.id}`} key={job.id} className="block group">
+                            <Link href={`/jobs/view?id=${job.id}`} key={job.id} className="block group">
                                 <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 h-full border border-gray-100 flex flex-col">
                                     <div className="flex justify-between items-start mb-4">
                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
