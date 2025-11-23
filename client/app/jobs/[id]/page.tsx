@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { MapPin, Calendar, DollarSign, User as UserIcon, CheckCircle, AlertCircle } from 'lucide-react';
@@ -19,8 +19,9 @@ interface Job {
     };
 }
 
-export default function JobDetailsPage() {
-    const { id } = useParams();
+function JobDetailsContent() {
+    const params = useParams();
+    const id = params?.id as string;
     const router = useRouter();
     const { user, token } = useAuth();
     const [job, setJob] = useState<Job | null>(null);
@@ -238,5 +239,13 @@ export default function JobDetailsPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function JobDetailsPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+            <JobDetailsContent />
+        </Suspense>
     );
 }
