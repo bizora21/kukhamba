@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Enums converted to String for SQLite compatibility
+// Validation will be done in application code
+// UserRole: CLIENT | PROVIDER
+// ServiceStatus: REQUESTED | NEGOTIATING | IN_PROGRESS | AWAITING_PAYMENT_CONFIRMATION | AWAITING_RECEIPT_CONFIRMATION | COMPLETED | CANCELLED
+
+model User {
+  id                String           @id @default(uuid())
+  email             String           @unique
+  password          String
+  fullName          String
+  phone             String
+  role              String
+  location          String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  
+  // Provider-specific fields
+  providerProfile   ProviderProfile?
+  
+  // Relations
+  sentRequests      ServiceRequest[] @relation("ClientRequests")
+  receivedRequests  ServiceRequest[] @relation("ProviderRequests")
+  sentMessages      Message[]        @relation("SentMessages")
+  receivedMessages  Message[]        @relation("ReceivedMessages")
+  givenReviews      Review[]         @relation("ClientReviews")
+  receivedReviews   Review[]         @relation("ProviderReviews")
+  jobApplications   JobApplication[]
+}
+
+model ProviderProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  serviceName       String
+  category          String
+  description       String?
+  locationAreas     String   // JSON array of areas
+  profilePhoto      String?
+  portfolio         String?  // JSON array of image URLs
+  contactInfo       String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model ServiceRequest {
+  id                String        @id @default(uuid())
+  clientId          String
+  client            User          @relation("ClientRequests", fields: [clientId], references: [id])
+  providerId        String?
+  provider          User?         @relation("ProviderRequests", fields: [providerId], references: [id])
+  
+  title             String
+  description       String
+  estimatedBudget   Float?
+  serviceLocation   String
+  status            String @default("REQUESTED")
+  type              String @default("DIRECT") // DIRECT | PUBLIC
+  category          String?
+  
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  messages          Message[]
+  review            Review?
+  jobApplications   JobApplication[]
+}
+
+model JobApplication {
+  id                String         @id @default(uuid())
+  serviceRequestId  String
+  serviceRequest    ServiceRequest @relation(fields: [serviceRequestId], references: [id], onDelete: Cascade)
+  providerId        String
+  provider          User           @relation(fields: [providerId], references: [id])
+  
+  price             Float
+  message           String
+  status            String         @default("PENDING") // PENDING | ACCEPTED | REJECTED
+  
+  createdAt         DateTime       @default(now())
+}
+
+model Message {
+  id                String         @id @default(uuid())
+  requestId         String
+  request           ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  
+  senderId          String
+  sender            User           @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId        String
+  receiver          User           @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  content           String
+  createdAt         DateTime       @default(now())
+}
+
+model Review {
+  id                String         @id @default(uuid())
+  requestId         String         @unique
+  request           ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  
+  clientId          String
+  client            User           @relation("ClientReviews", fields: [clientId], references: [id])
+  providerId        String
+  provider          User           @relation("ProviderReviews", fields: [providerId], references: [id])
+  
+  rating            Int            // 1-5
+  comment           String?
+  createdAt         DateTime       @default(now())
+}
