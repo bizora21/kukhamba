@@ -5,8 +5,8 @@ Se você prefere não usar comandos, pode fazer o upload direto pelo site.
 
 ### 1. Criar o Repositório
 1.  Acesse [github.com/new](https://github.com/new).
-2.  Dê um nome ao repositório (ex: `kukhamba`).
 3.  Clique em **Create repository**.
+2.  Dê um nome ao repositório (ex: `kukhamba`).
 
 ### 2. Enviar os Arquivos
 1.  Na tela do repositório criado, procure o link **"uploading an existing file"**.
