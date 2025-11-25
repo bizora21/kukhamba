@@ -141,8 +141,8 @@ export default function SearchPage() {
                                         key={cat.id}
                                         onClick={() => setSelectedCategory(cat.id)}
                                         className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat.id
-                                                ? 'bg-purple-600 text-white'
-                                                : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'text-gray-400 hover:bg-white/5 hover:text-white'
                                             }`}
                                     >
                                         {cat.name}
@@ -196,7 +196,7 @@ export default function SearchPage() {
 
                         <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             {filteredProviders.map((provider) => (
-                                <Link href={`/provider/${provider.id}`} key={provider.id} className="group">
+                                <Link href={`/provider/view?id=${provider.id}`} key={provider.id} className="group">
                                     <div className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-purple-500/50 transition-all hover:-translate-y-1 h-full flex flex-col">
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="flex items-center gap-3">

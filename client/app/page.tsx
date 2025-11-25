@@ -180,7 +180,7 @@ export default function Home() {
                     <span className="font-bold text-slate-900 ml-1.5">{provider.rating}</span>
                     <span className="text-slate-400 text-sm ml-1">({provider.reviews} avaliações)</span>
                   </div>
-                  <Link href={`/provider/${provider.id}`} className="text-blue-600 font-semibold text-sm hover:underline">
+                  <Link href={`/provider/view?id=${provider.id}`} className="text-blue-600 font-semibold text-sm hover:underline">
                     Ver Perfil
                   </Link>
                 </div>
